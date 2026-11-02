@@ -273,4 +273,4 @@ if _UI.is_dir():
 if __name__ == "__main__":
     import uvicorn
     session()                                    # build before the first request
-    uvicorn.run(app, host="127.0.0.1", port=int(os.getenv("FEED_PORT", "8765")), log_level="warning")
+    uvicorn.run(app, host=os.getenv("FEED_HOST", "127.0.0.1"), port=int(os.getenv("PORT") or os.getenv("FEED_PORT", "8765")), log_level="warning")

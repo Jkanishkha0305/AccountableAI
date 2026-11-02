@@ -1,0 +1,29 @@
+services:
+  app:
+    build: ..
+    restart: unless-stopped
+    environment:
+      FEED_HOST: 0.0.0.0
+      PORT: "8765"
+      FEED_BUDGET: "0.25"
+    expose:
+      - "8765"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?set DOMAIN, e.g. app.example.com}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  caddy_data:
+  caddy_config:
