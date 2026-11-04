@@ -6,3 +6,6 @@ dashboard/node_modules
 dashboard/.next
 __pycache__
 evals/runs
+.env
+.env.*
+!.env.example

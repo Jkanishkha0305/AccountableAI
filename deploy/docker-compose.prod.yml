@@ -6,14 +6,30 @@ services:
       FEED_HOST: 0.0.0.0
       PORT: "8765"
       FEED_BUDGET: "0.25"
+    # secrets live only on the server, never in git: see deploy/README.md
+    env_file:
+      - path: ../.env.prod
+        required: false
     expose:
       - "8765"
+
+  web:
+    build:
+      context: ..
+      dockerfile: Dockerfile.web
+      args:
+        FEED_URL: http://app:8765
+    restart: unless-stopped
+    depends_on:
+      - app
+    expose:
+      - "3000"
 
   caddy:
     image: caddy:2
     restart: unless-stopped
     depends_on:
-      - app
+      - web
     ports:
       - "80:80"
       - "443:443"
